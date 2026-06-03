@@ -1,0 +1,4 @@
+name: GuessTheBuild-Module
+main: net.blueva.arcade.plugin.BlueArcadeModule
+version: ${revision}
+api-version: 1.18

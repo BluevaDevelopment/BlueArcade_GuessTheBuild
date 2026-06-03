@@ -1,0 +1,12 @@
+name: Guess The Build
+id: guess_the_build
+version: ${revision}
+type: MINIGAME
+api-version: 3.3
+main: net.blueva.arcade.modules.guess_the_build.GuessTheBuildModule
+
+authors:
+  - Blueva
+  - Whiron
+
+description: "One player builds a secret theme while others guess it in chat. Rotate builders and compete for the most points!"
