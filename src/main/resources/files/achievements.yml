@@ -1,19 +1,25 @@
+#  ____  _               _                      _
+# | __ )| |_   _  ___   / \   _ __ ___ __ _  __| | ___
+# |  _ \| | | | |/ _ \ / _ \ | '__/ __/ _` |/ _` |/ _ \
+# | |_) | | |_| |  __// ___ \| | | (_| (_| | (_| |  __/
+# |____/|_|\__,_|\___/_/   \_|_|  \___\__,_|\__,_|\___|
+#
+# [!] Arcade by Blueva | https://blueva.net/store/blue-arcade [!]
+
 # Guess The Build Achievements
 
-file_version: 1
-
 categories:
-  - id: guess_the_build
+  - id: "guess_the_build"
     name: "Guess The Build"
     description: "Achievements for Guess The Build"
-    icon: CRAFTING_TABLE
+    icon: "CRAFTING_TABLE"
 
 trees:
   veteran:
     name: "Veteran"
     description: "Play {target} games of Guess The Build."
-    category: guess_the_build
-    icon: PAPER
+    category: "guess_the_build"
+    icon: "PAPER"
     stat: "games_played"
     levels:
       - target: 10
@@ -30,8 +36,8 @@ trees:
   point_collector:
     name: "Point Collector"
     description: "Earn {target} total points in Guess The Build."
-    category: guess_the_build
-    icon: GOLD_INGOT
+    category: "guess_the_build"
+    icon: "GOLD_INGOT"
     stat: "points_total"
     levels:
       - target: 100
@@ -48,8 +54,8 @@ trees:
   winner_path:
     name: "Winner's Path"
     description: "Win {target} games of Guess The Build."
-    category: guess_the_build
-    icon: TROPHY
+    category: "guess_the_build"
+    icon: "TROPHY"
     stat: "wins"
     levels:
       - target: 5

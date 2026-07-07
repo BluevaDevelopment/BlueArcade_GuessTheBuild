@@ -44,7 +44,7 @@ public class GuessTheBuildChatListener implements Listener {
 
         if (player.equals(state.getCurrentBuilder())) {
             event.setCancelled(true);
-            String msg = game.getModuleConfig().getStringFrom("language.yml", "game.cant_talk_builder");
+            String msg = game.getModuleConfig().getTranslation(player, "game.cant_talk_builder");
             if (msg != null) {
                 context.getMessagesAPI().sendRaw(player, msg);
             }
@@ -53,7 +53,7 @@ public class GuessTheBuildChatListener implements Listener {
 
         if (state.hasGuessed(player)) {
             event.setCancelled(true);
-            String msg = game.getModuleConfig().getStringFrom("language.yml", "game.cant_talk_guessed");
+            String msg = game.getModuleConfig().getTranslation(player, "game.cant_talk_guessed");
             if (msg != null) {
                 context.getMessagesAPI().sendRaw(player, msg);
             }

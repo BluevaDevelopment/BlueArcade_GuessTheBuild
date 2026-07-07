@@ -1,11 +1,17 @@
-# Guess The Build Module Settings
+#  ____  _               _                      _
+# | __ )| |_   _  ___   / \   _ __ ___ __ _  __| | ___
+# |  _ \| | | | |/ _ \ / _ \ | '__/ __/ _` |/ _` |/ _ \
+# | |_) | | |_| |  __// ___ \| | | (_| (_| | (_| |  __/
+# |____/|_|\__,_|\___/_/   \_|_|  \___\__,_|\__,_|\___|
+#
+# [!] Arcade by Blueva | https://blueva.net/store/blue-arcade [!]
 
-file_version: 1
+# Guess The Build Module Settings
 
 # Visual representation in core vote menu
 menus:
   vote:
-    item: CRAFTING_TABLE
+    item: "CRAFTING_TABLE"
 
 # Themes for Guess The Build.
 # Each entry can have multiple synonymous names separated by commas.

@@ -50,7 +50,7 @@ public class GuessTheBuildThemeService {
 
         pendingSelections.put(builder.getUniqueId(), new PendingSelection(easy, medium, hard, onSelect));
 
-        MenuDefinition<Material> menu = buildMenu(easy, medium, hard);
+        MenuDefinition<Material> menu = buildMenu(builder, easy, medium, hard);
         if (menuAPI != null) {
             menuAPI.openMenu(builder, menu, Collections.emptyMap());
         }
@@ -112,17 +112,17 @@ public class GuessTheBuildThemeService {
         return new GuessTheme(names, difficulty);
     }
 
-    private MenuDefinition<Material> buildMenu(GuessTheme easy, GuessTheme medium, GuessTheme hard) {
-        String title = moduleConfig.getStringFrom("language.yml", "theme_selection.menu.title");
+    private MenuDefinition<Material> buildMenu(Player player, GuessTheme easy, GuessTheme medium, GuessTheme hard) {
+        String title = moduleConfig.getTranslation(player, "theme_selection.menu.title");
         if (title == null) {
             title = "<bold><gradient:aqua:light_purple>Select a Theme</gradient></bold>";
         }
 
         List<JavaMenuItem<Material>> items = new ArrayList<>();
 
-        items.add(JavaMenuItem.of(11, buildItemDefinition(easy, "theme_selection.easy")));
-        items.add(JavaMenuItem.of(13, buildItemDefinition(medium, "theme_selection.medium")));
-        items.add(JavaMenuItem.of(15, buildItemDefinition(hard, "theme_selection.hard")));
+        items.add(JavaMenuItem.of(11, buildItemDefinition(player, easy, "theme_selection.easy")));
+        items.add(JavaMenuItem.of(13, buildItemDefinition(player, medium, "theme_selection.medium")));
+        items.add(JavaMenuItem.of(15, buildItemDefinition(player, hard, "theme_selection.hard")));
 
         for (int i = 0; i < 27; i++) {
             if (i != 11 && i != 13 && i != 15) {
@@ -136,12 +136,12 @@ public class GuessTheBuildThemeService {
             }
         }
 
-        BedrockMenuDefinition bedrockMenu = buildBedrockMenu(easy, medium, hard);
+        BedrockMenuDefinition bedrockMenu = buildBedrockMenu(player, easy, medium, hard);
         return new MenuDefinition<>(title, 27, items, bedrockMenu);
     }
 
-    private JavaItemDefinition<Material> buildItemDefinition(GuessTheme theme, String labelKey) {
-        String difficultyLabel = moduleConfig.getStringFrom("language.yml", labelKey);
+    private JavaItemDefinition<Material> buildItemDefinition(Player player, GuessTheme theme, String labelKey) {
+        String difficultyLabel = moduleConfig.getTranslation(player, labelKey);
         String name = (difficultyLabel != null ? difficultyLabel : theme.difficulty.name())
                 .replace("{theme}", theme.names.get(0))
                 .replace("{points}", String.valueOf(theme.difficulty.getPointsReward()));
@@ -150,7 +150,7 @@ public class GuessTheBuildThemeService {
         String themeStr = String.join(", ", theme.names);
         lore.add("<gray>" + themeStr + "</gray>");
         lore.add("");
-        String pointsLore = moduleConfig.getStringFrom("language.yml", "theme_selection.points_lore");
+        String pointsLore = moduleConfig.getTranslation(player, "theme_selection.points_lore");
         if (pointsLore != null) {
             lore.add(pointsLore.replace("{points}", String.valueOf(theme.difficulty.getPointsReward())));
         }
@@ -164,23 +164,23 @@ public class GuessTheBuildThemeService {
         );
     }
 
-    private BedrockMenuDefinition buildBedrockMenu(GuessTheme easy, GuessTheme medium, GuessTheme hard) {
-        String title = moduleConfig.getStringFrom("language.yml", "theme_selection.menu.title");
+    private BedrockMenuDefinition buildBedrockMenu(Player player, GuessTheme easy, GuessTheme medium, GuessTheme hard) {
+        String title = moduleConfig.getTranslation(player, "theme_selection.menu.title");
         if (title == null) {
             title = "<bold><gradient:aqua:light_purple>Select a Theme</gradient></bold>";
         }
         List<String> content = List.of("<gray>Select a difficulty to reveal your secret theme.</gray>");
 
         List<BedrockButtonDefinition> buttons = new ArrayList<>();
-        buttons.add(buildBedrockButton(easy, "theme_selection.easy"));
-        buttons.add(buildBedrockButton(medium, "theme_selection.medium"));
-        buttons.add(buildBedrockButton(hard, "theme_selection.hard"));
+        buttons.add(buildBedrockButton(player, easy, "theme_selection.easy"));
+        buttons.add(buildBedrockButton(player, medium, "theme_selection.medium"));
+        buttons.add(buildBedrockButton(player, hard, "theme_selection.hard"));
 
         return new BedrockSimpleMenuDefinition(title, content, buttons);
     }
 
-    private BedrockButtonDefinition buildBedrockButton(GuessTheme theme, String labelKey) {
-        String difficultyLabel = moduleConfig.getStringFrom("language.yml", labelKey);
+    private BedrockButtonDefinition buildBedrockButton(Player player, GuessTheme theme, String labelKey) {
+        String difficultyLabel = moduleConfig.getTranslation(player, labelKey);
         String name = (difficultyLabel != null ? difficultyLabel : theme.difficulty.name())
                 .replace("{theme}", theme.names.get(0))
                 .replace("{points}", String.valueOf(theme.difficulty.getPointsReward()));

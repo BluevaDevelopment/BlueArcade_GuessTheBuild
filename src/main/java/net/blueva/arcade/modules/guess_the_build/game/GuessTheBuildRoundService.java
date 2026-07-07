@@ -59,11 +59,11 @@ public class GuessTheBuildRoundService {
             }
         }
 
-        String title = moduleConfig.getStringFrom("language.yml", "game.theme_being_selected.title");
-        String subtitle = moduleConfig.getStringFrom("language.yml", "game.theme_being_selected.subtitle");
-        if (title != null && subtitle != null) {
-            for (Player player : context.getPlayers()) {
-                if (player.isOnline()) {
+        for (Player player : context.getPlayers()) {
+            if (player.isOnline()) {
+                String title = moduleConfig.getTranslation(player, "game.theme_being_selected.title");
+                String subtitle = moduleConfig.getTranslation(player, "game.theme_being_selected.subtitle");
+                if (title != null && subtitle != null) {
                     context.getTitlesAPI().sendRaw(player, title, subtitle, 0, 40, 20);
                 }
             }
@@ -142,10 +142,10 @@ public class GuessTheBuildRoundService {
             context.getScoreboardAPI().showScoreboard(player, "scoreboard.default");
         }
 
-        String broadcast = moduleConfig.getStringFrom("language.yml", "game.theme_selected_broadcast");
-        if (broadcast != null) {
-            for (Player player : context.getPlayers()) {
-                if (player.isOnline()) {
+        for (Player player : context.getPlayers()) {
+            if (player.isOnline()) {
+                String broadcast = moduleConfig.getTranslation(player, "game.theme_selected_broadcast");
+                if (broadcast != null) {
                     context.getMessagesAPI().sendRaw(player, broadcast);
                 }
             }

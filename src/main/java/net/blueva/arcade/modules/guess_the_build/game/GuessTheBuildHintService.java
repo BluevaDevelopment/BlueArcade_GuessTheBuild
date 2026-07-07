@@ -48,12 +48,11 @@ public class GuessTheBuildHintService {
 
         if (!characterCountBroadcasted && timeLeft <= charCountBroadcastAt) {
             characterCountBroadcasted = true;
-            String msg = moduleConfig.getStringFrom("language.yml", "game.character_count");
-            if (msg != null) {
-                msg = msg.replace("{count}", String.valueOf(countLetters(theme)));
-                for (Player player : context.getPlayers()) {
-                    if (player.isOnline()) {
-                        context.getMessagesAPI().sendRaw(player, msg);
+            for (Player player : context.getPlayers()) {
+                if (player.isOnline()) {
+                    String msg = moduleConfig.getTranslation(player, "game.character_count");
+                    if (msg != null) {
+                        context.getMessagesAPI().sendRaw(player, msg.replace("{count}", String.valueOf(countLetters(theme))));
                     }
                 }
             }
@@ -89,45 +88,30 @@ public class GuessTheBuildHintService {
                                 GuessTheBuildArenaState state, String theme) {
         String timeStr = formatTime(state.getBuildTimeLeft());
 
-        String builderMessage = moduleConfig.getStringFrom("language.yml", "game.action_bar.builder");
-        if (builderMessage == null) {
-            builderMessage = "<aqua>You are building:</aqua> <green>{theme}</green> <dark_gray>•</dark_gray> <aqua>Time:</aqua> <yellow>{time}</yellow>";
-        }
-        builderMessage = builderMessage.replace("{theme}", theme).replace("{time}", timeStr);
-
-        String guessedMessage = moduleConfig.getStringFrom("language.yml", "game.action_bar.guessed");
-        if (guessedMessage == null) {
-            guessedMessage = "<aqua>Theme:</aqua> <green>{theme}</green> <dark_gray>•</dark_gray> <aqua>Status:</aqua> <green>Guessed!</green>";
-        }
-        guessedMessage = guessedMessage.replace("{theme}", theme);
-
-        String guessingTemplate = moduleConfig.getStringFrom("language.yml", "game.action_bar.guessing");
-        if (guessingTemplate == null) {
-            guessingTemplate = "<aqua>Theme:</aqua> <white>{hint}</white> <dark_gray>•</dark_gray> <aqua>Time:</aqua> <yellow>{time}</yellow>";
-        }
         String hintString = buildHintString(theme, state.getRevealedLetterIndices());
-        String guessingMessage = guessingTemplate.replace("{hint}", hintString).replace("{time}", timeStr);
-
-        @SuppressWarnings("unchecked")
-        MessageAPI<Player> messagesAPI = (MessageAPI<Player>) ModuleAPI.getMessagesAPI();
-
         Player builder = state.getCurrentBuilder();
         for (Player player : context.getPlayers()) {
             if (!player.isOnline()) {
                 continue;
             }
             if (player.equals(builder)) {
-                if (messagesAPI != null) {
-                    messagesAPI.sendActionBar(player, builderMessage);
+                String builderMessage = moduleConfig.getTranslation(player, "game.action_bar.builder");
+                if (builderMessage == null) {
+                    builderMessage = "<aqua>You are building:</aqua> <green>{theme}</green> <dark_gray>•</dark_gray> <aqua>Time:</aqua> <yellow>{time}</yellow>";
                 }
+                context.getMessagesAPI().sendActionBar(player, builderMessage.replace("{theme}", theme).replace("{time}", timeStr));
             } else if (state.hasGuessed(player)) {
-                if (messagesAPI != null) {
-                    messagesAPI.sendActionBar(player, guessedMessage);
+                String guessedMessage = moduleConfig.getTranslation(player, "game.action_bar.guessed");
+                if (guessedMessage == null) {
+                    guessedMessage = "<aqua>Theme:</aqua> <green>{theme}</green> <dark_gray>•</dark_gray> <aqua>Status:</aqua> <green>Guessed!</green>";
                 }
+                context.getMessagesAPI().sendActionBar(player, guessedMessage.replace("{theme}", theme));
             } else {
-                if (messagesAPI != null) {
-                    messagesAPI.sendActionBar(player, guessingMessage);
+                String guessingTemplate = moduleConfig.getTranslation(player, "game.action_bar.guessing");
+                if (guessingTemplate == null) {
+                    guessingTemplate = "<aqua>Theme:</aqua> <white>{hint}</white> <dark_gray>•</dark_gray> <aqua>Time:</aqua> <yellow>{time}</yellow>";
                 }
+                context.getMessagesAPI().sendActionBar(player, guessingTemplate.replace("{hint}", hintString).replace("{time}", timeStr));
             }
         }
     }

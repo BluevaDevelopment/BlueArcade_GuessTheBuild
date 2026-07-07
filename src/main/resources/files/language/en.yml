@@ -1,6 +1,12 @@
-# Guess The Build Module Language
+#  ____  _               _                      _
+# | __ )| |_   _  ___   / \   _ __ ___ __ _  __| | ___
+# |  _ \| | | | |/ _ \ / _ \ | '__/ __/ _` |/ _` |/ _ \
+# | |_) | | |_| |  __// ___ \| | | (_| (_| | (_| |  __/
+# |____/|_|\__,_|\___/_/   \_|_|  \___\__,_|\__,_|\___|
+#
+# [!] Arcade by Blueva | https://blueva.net/store/blue-arcade [!]
 
-file_version: 2
+# Guess The Build Module Language
 display_name: "Guess The Build"
 
 description:
@@ -15,16 +21,16 @@ description:
 
 setup_messages:
   plot:
-    usage: "<red>Usage:</red> <yellow>/baa game <id> guess_the_build plot <set|spawn></yellow>"
+    usage: "{prefix} <red>Usage:</red> <yellow>/baa game <id> guess_the_build plot <set|spawn></yellow>"
     set:
-      must_use_stick: "<red>Select two corners with the setup tool first.</red>"
-      too_shallow: "<red>Plot is too shallow. The selection must be at least 3 blocks high (1 floor + 2 air).</red>"
-      no_floor: "<red>No floor detected. The lowest layer of the selection must contain blocks.</red>"
-      too_many_floor_layers: "<red>Too many floor layers detected. The floor must be 1-2 block layers thick. Clear excess blocks above the floor.</red>"
-      success: "<green>Plot set.</green> <gray>Blocks:</gray> <white>{blocks}</white> <gray>({x}x{y}x{z})</gray> <gray>Floor:</gray> <yellow>{floor}</yellow>"
-      spawn_set: "<gray>Plot spawn set to your current location. You can change it anytime with</gray> <yellow>/baa game <id> guess_the_build plot spawn</yellow>"
+      must_use_stick: "{prefix} <red>Select two corners with the setup tool first.</red>"
+      too_shallow: "{prefix} <red>Plot is too shallow. The selection must be at least 3 blocks high (1 floor + 2 air).</red>"
+      no_floor: "{prefix} <red>No floor detected. The lowest layer of the selection must contain blocks.</red>"
+      too_many_floor_layers: "{prefix} <red>Too many floor layers detected. The floor must be 1-2 block layers thick. Clear excess blocks above the floor.</red>"
+      success: "{prefix} <green>Plot set.</green> <gray>Blocks:</gray> <white>{blocks}</white> <gray>({x}x{y}x{z})</gray> <gray>Floor:</gray> <yellow>{floor}</yellow>"
+      spawn_set: "{prefix} <gray>Plot spawn set to your current location. You can change it anytime with</gray> <yellow>/baa game <id> guess_the_build plot spawn</yellow>"
     spawn:
-      set: "<green>Plot spawn updated to your current location.</green>"
+      set: "{prefix} <green>Plot spawn updated to your current location.</green>"
 
 game:
   round_start: "<yellow>Round <white>{round}</white></yellow>"

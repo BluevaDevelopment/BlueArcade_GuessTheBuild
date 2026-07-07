@@ -108,10 +108,10 @@ public class GuessTheBuildGame {
                 continue;
             }
             context.getSoundsAPI().play(player, coreConfig.getSound("sounds.starting_game.countdown"));
-            String title = coreConfig.getLanguage("titles.starting_game.title")
+            String title = coreConfig.getLanguage(player, "titles.starting_game.title")
                     .replace("{game_display_name}", moduleInfo.getName())
                     .replace("{time}", String.valueOf(secondsLeft));
-            String subtitle = coreConfig.getLanguage("titles.starting_game.subtitle")
+            String subtitle = coreConfig.getLanguage(player, "titles.starting_game.subtitle")
                     .replace("{game_display_name}", moduleInfo.getName())
                     .replace("{time}", String.valueOf(secondsLeft));
             context.getTitlesAPI().sendRaw(player, title, subtitle, 0, 20, 5);
@@ -248,7 +248,7 @@ public class GuessTheBuildGame {
         }
         state.addWhoGuessed(guesser);
 
-        String broadcast = moduleConfig.getStringFrom("language.yml", "game.correct_guess_broadcast");
+        String broadcast = moduleConfig.getTranslation(guesser, "game.correct_guess_broadcast");
         if (broadcast != null) {
             broadcast = broadcast.replace("{player}", guesser.getName());
             for (Player player : context.getPlayers()) {
@@ -258,7 +258,7 @@ public class GuessTheBuildGame {
             }
         }
 
-        String pointsMsg = moduleConfig.getStringFrom("language.yml", "game.correct_guess_points");
+        String pointsMsg = moduleConfig.getTranslation(guesser, "game.correct_guess_points");
         if (pointsMsg != null) {
             context.getMessagesAPI().sendRaw(guesser, pointsMsg.replace("{points}", String.valueOf(totalPoints)));
         }
@@ -271,7 +271,7 @@ public class GuessTheBuildGame {
             if (builderPlot != null) {
                 builderPlot.addPoints(builderPoints);
             }
-            String builderMsg = moduleConfig.getStringFrom("language.yml", "game.builder_got_points");
+            String builderMsg = moduleConfig.getTranslation(guesser, "game.builder_got_points");
             if (builderMsg != null) {
                 context.getMessagesAPI().sendRaw(builder, builderMsg.replace("{points}", String.valueOf(builderPoints)));
             }
@@ -294,34 +294,27 @@ public class GuessTheBuildGame {
         context.getSchedulerAPI().cancelTask("arena_" + context.getArenaId() + "_guess_the_build_build_timer");
 
         if (!allGuessed) {
-            String msg = moduleConfig.getStringFrom("language.yml", "game.theme_reveal_timeout");
             String theme = state.getCurrentTheme() != null ? state.getCurrentTheme() : "???";
-            if (msg != null) {
-                msg = msg.replace("{theme}", theme);
-                for (Player player : context.getPlayers()) {
-                    if (player.isOnline()) {
-                        context.getMessagesAPI().sendRaw(player, msg);
+            for (Player player : context.getPlayers()) {
+                if (player.isOnline()) {
+                    String msg = moduleConfig.getTranslation(player, "game.theme_reveal_timeout");
+                    if (msg != null) {
+                        context.getMessagesAPI().sendRaw(player, msg.replace("{theme}", theme));
                     }
-                }
-            }
-            String title = moduleConfig.getStringFrom("language.yml", "game.theme_reveal_timeout_title");
-            String subtitle = moduleConfig.getStringFrom("language.yml", "game.theme_reveal_timeout_subtitle");
-            if (title != null && subtitle != null) {
-                subtitle = subtitle.replace("{theme}", theme);
-                for (Player player : context.getPlayers()) {
-                    if (player.isOnline()) {
-                        context.getTitlesAPI().sendRaw(player, title, subtitle, 0, 40, 20);
+                    String title = moduleConfig.getTranslation(player, "game.theme_reveal_timeout_title");
+                    String subtitle = moduleConfig.getTranslation(player, "game.theme_reveal_timeout_subtitle");
+                    if (title != null && subtitle != null) {
+                        context.getTitlesAPI().sendRaw(player, title, subtitle.replace("{theme}", theme), 0, 40, 20);
                     }
                 }
             }
         } else {
-            String msg = moduleConfig.getStringFrom("language.yml", "game.all_guessed");
             String theme = state.getCurrentTheme() != null ? state.getCurrentTheme() : "???";
-            if (msg != null) {
-                msg = msg.replace("{theme}", theme);
-                for (Player player : context.getPlayers()) {
-                    if (player.isOnline()) {
-                        context.getMessagesAPI().sendRaw(player, msg);
+            for (Player player : context.getPlayers()) {
+                if (player.isOnline()) {
+                    String msg = moduleConfig.getTranslation(player, "game.all_guessed");
+                    if (msg != null) {
+                        context.getMessagesAPI().sendRaw(player, msg.replace("{theme}", theme));
                     }
                 }
             }
@@ -419,16 +412,11 @@ public class GuessTheBuildGame {
 
     private void broadcastTimeMessage(GameContext<Player, Location, World, Material, ItemStack, Sound, Block, Entity> context,
                                       String path, int seconds) {
-        String template = moduleConfig.getStringFrom("language.yml", path);
+        String template = moduleConfig.getTranslation(null, path);
         if (template == null || template.isBlank()) {
             return;
         }
-        int minutes = seconds / 60;
-        int secs = seconds % 60;
-        String timeStr = minutes > 0
-                ? minutes + "m " + secs + "s"
-                : secs + "s";
-        String message = template.replace("{time}", timeStr);
+        String message = template.replace("{time}", String.valueOf(seconds));
         for (Player player : context.getPlayers()) {
             if (player.isOnline()) {
                 context.getMessagesAPI().sendRaw(player, message);
@@ -549,4 +537,10 @@ public class GuessTheBuildGame {
     public GuessTheBuildThemeService getThemeService() {
         return themeService;
     }
+
+    private static String formatCountdownTime(int seconds) {
+        int safeSeconds = Math.max(0, seconds);
+        return String.format("%02d:%02d", safeSeconds / 60, safeSeconds % 60);
+    }
+
 }

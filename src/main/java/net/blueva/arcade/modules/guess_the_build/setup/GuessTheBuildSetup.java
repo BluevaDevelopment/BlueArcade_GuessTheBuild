@@ -65,7 +65,7 @@ public class GuessTheBuildSetup implements GameSetupHandler {
         if ("spawn".equalsIgnoreCase(action)) {
             return handlePlotSpawnSet(context);
         }
-        context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage("plot.usage"));
+        context.getMessagesAPI().sendRaw(context.getPlayer(), getSetupMessage(context.getPlayer(), "plot.usage"));
         return true;
     }
 
@@ -76,7 +76,7 @@ public class GuessTheBuildSetup implements GameSetupHandler {
         }
 
         if (!context.getSelection().hasCompleteSelection(player)) {
-            context.getMessagesAPI().sendRaw(player, getSetupMessage("plot.set.must_use_stick"));
+            context.getMessagesAPI().sendRaw(player, getSetupMessage(context.getPlayer(), "plot.set.must_use_stick"));
             return true;
         }
 
@@ -92,7 +92,7 @@ public class GuessTheBuildSetup implements GameSetupHandler {
         int height = maxY - minY + 1;
 
         if (height < 3) {
-            context.getMessagesAPI().sendRaw(player, getSetupMessage("plot.set.too_shallow"));
+            context.getMessagesAPI().sendRaw(player, getSetupMessage(context.getPlayer(), "plot.set.too_shallow"));
             return true;
         }
 
@@ -103,11 +103,11 @@ public class GuessTheBuildSetup implements GameSetupHandler {
 
         int floorLayers = countFloorLayers(world, minX, maxX, minY, maxY, minZ, maxZ);
         if (floorLayers == 0) {
-            context.getMessagesAPI().sendRaw(player, getSetupMessage("plot.set.no_floor"));
+            context.getMessagesAPI().sendRaw(player, getSetupMessage(context.getPlayer(), "plot.set.no_floor"));
             return true;
         }
         if (floorLayers > 2) {
-            context.getMessagesAPI().sendRaw(player, getSetupMessage("plot.set.too_many_floor_layers"));
+            context.getMessagesAPI().sendRaw(player, getSetupMessage(context.getPlayer(), "plot.set.too_many_floor_layers"));
             return true;
         }
 
@@ -124,7 +124,7 @@ public class GuessTheBuildSetup implements GameSetupHandler {
         int z = (int) Math.abs(pos2.getZ() - pos1.getZ()) + 1;
         int blocks = x * y * z;
 
-        String msg = getSetupMessage("plot.set.success")
+        String msg = getSetupMessage(context.getPlayer(), "plot.set.success")
                 .replace("{blocks}", String.valueOf(blocks))
                 .replace("{x}", String.valueOf(x))
                 .replace("{y}", String.valueOf(y))
@@ -132,7 +132,7 @@ public class GuessTheBuildSetup implements GameSetupHandler {
                 .replace("{floor}", floorMaterial.name());
         context.getMessagesAPI().sendRaw(player, msg);
 
-        String spawnMsg = getSetupMessage("plot.set.spawn_set");
+        String spawnMsg = getSetupMessage(context.getPlayer(), "plot.set.spawn_set");
         if (spawnMsg != null && !spawnMsg.isEmpty()) {
             context.getMessagesAPI().sendRaw(player, spawnMsg);
         }
@@ -150,7 +150,7 @@ public class GuessTheBuildSetup implements GameSetupHandler {
             context.getData().setString("basic.world", loc.getWorld().getName());
             context.getData().save();
 
-            String msg = getSetupMessage("plot.spawn.set");
+            String msg = getSetupMessage(context.getPlayer(), "plot.spawn.set");
             if (msg == null || msg.isEmpty()) {
                 msg = "<green>Plot spawn updated to your current location.</green>";
             }
@@ -193,8 +193,8 @@ public class GuessTheBuildSetup implements GameSetupHandler {
         return Material.GRASS_BLOCK;
     }
 
-    private String getSetupMessage(String key) {
-        String message = moduleConfig.getStringFrom("language.yml", "setup_messages." + key);
+    private String getSetupMessage(Player player, String key) {
+        String message = moduleConfig.getTranslation(player, "setup_messages." + key);
         if (message != null && !message.isBlank()) {
             return message;
         }
